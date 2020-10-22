@@ -1,0 +1,38 @@
+# VIM
+*.swp
+*.swo
+*.log
+# Object files
+*.o
+# Doxygen docomentation
+3pxnet-inference/html/*
+# Logs 
+3pxnet-inference/log/*
+# To retain directories
+!**/.gitkeep
+# training data
+3pxnet-compiler/data/*
+3pxnet-compiler/__pycache__/*
+3pxnet-training/__pycache__/*
+3pxnet-training/data/*
+3pxnet-training/training_data/*
+# compiled result
+3pxnet-compiler/autogen/*
+# local working repo
+.idea/*
+Project1/*
+3pxnet-training/.idea/*
+# generated file
+CNN_Large.nnef/*
+CNN_Medium.nnef/*
+CNN_Medium1.nnef/*
+CNN_Tiny.nnef/*
+FC_Small.nnef/*
+FC_Large.nnef/*
+source
+3pxnet-training/nnef.egg-info/*
+3pxnet-training/convert.py
+3pxnet-compiler/__Golden.txt
+3pxnet-compiler/__Compiled.txt
+3pxnet-compiler/utils.py
+3pxnet-compiler/utils_own.py
