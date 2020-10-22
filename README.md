@@ -1,5 +1,25 @@
 # 3PXNet
-This is a software library used for training and inference of a neural network of 3PXNet style.
+This is a software library used for training and inference of dense and sparse (3PXNet) binarized neural networks.
+
+For more details about 3PXNet implementation, please refer to the following publication:
+
+[3PXNet: Pruned-Permuted-Packed XNOR Networks for Edge Machine Learning](https://dl.acm.org/doi/abs/10.1145/3371157)
+
+Please consider citing our work if you found it useful for your research:
+
+```
+@article{romaszkan20203pxnet,
+   title={3PXNet: Pruned-Permuted-Packed XNOR Networks for Edge Machine Learning},
+   author={Romaszkan, Wojciech and Li, Tianmu and Gupta, Puneet},
+   journal={ACM Transactions on Embedded Computing Systems (TECS)},
+   volume={19},
+   number={1},
+   pages={1--23},
+   year={2020},
+   publisher={ACM New York, NY, USA}
+}
+```  
+
 ## Directory Structure
 ```
 .
