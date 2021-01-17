@@ -60,8 +60,8 @@ def main():
         binary=False
     device = 0
 
-    test_start_id = args.test_start_id
-    test_end_id = args.test_end_id
+    test_start_id = int(args.test_start_id)
+    test_end_id = int(args.test_end_id)
     if test_end_id <= test_start_id:
         print("ERROR: test end id is less than test start id")
         exit(1)
