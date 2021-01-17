@@ -7,8 +7,8 @@ The code is based on https://github.com/itayhubara/BinaryNet.pytorch
 ## Requirements
 
 * Python 3.6, Numpy, pandas, bokeh
-* PyTorch 0.4.0 or newer
-* Download convert.py from https://github.com/KhronosGroup/NNEF-Tools/tree/master/nnef_tools and put it in this directory
+* PyTorch 0.4.0 to 1.5.1
+* Download convert.py from the branch legacy of https://github.com/KhronosGroup/NNEF-Tools/tree/master/nnef_tools and put it in this directory
 
 ## MNIST
 
