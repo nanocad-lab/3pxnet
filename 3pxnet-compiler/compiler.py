@@ -1000,25 +1000,32 @@ class convert(object):
          self.source.write(str(self.in_shape[2])+"*"+str(self.in_shape[3])+"*"+str(self.in_shape[1])+"*sizeof(uint8_t);\n\t\t")
 
       # write out source code: second part
+      batch_index = 1
       for i in range(len(total_ops)):
          sparse=self.testsparse(i,total_ops)
          print("Operation ", end='')
+         have_batch = False
+         
          if i < len(total_ops) - 1:
             for r in range(total_ops[i], total_ops[i + 1]):
                if self.graph.operations[r].name == 'unsqueeze' or self.graph.operations[r].name == 'squeeze' or \
                        self.graph.operations[r].name == 'clamp' or self.graph.operations[
                   r].name == 'batch_normalization' or self.graph.operations[r].name=='max_pool':
                   print('# ' + str(r), end=' ')
+                  if self.graph.operations[r].name == 'batch_normalization':
+                     have_batch=True
          else:
             for r in range(total_ops[i], len(self.graph.operations)):
                if self.graph.operations[r].name == 'unsqueeze' or self.graph.operations[r].name == 'squeeze' or \
                        self.graph.operations[r].name == 'clamp' or self.graph.operations[
                   r].name == 'batch_normalization' or self.graph.operations[r].name=='max_pool':
                   print('# ' + str(r), end=' ')
+                  if self.graph.operations[r].name == 'batch_normalization':
+                     have_batch=True
          print("uses C library function ", end='')
          if total_ops[i] in self.matrixmul:
             #normal layer with batchnorm
-            if i<len(total_ops)-1 and (total_ops[j] in self.batchn.keys() for j in range(total_ops[i],total_ops[i+1])):
+            if i<len(total_ops)-1 and have_batch:
                if sparse:
                   print("Fc3pxnWrap")
                   self.source.write("Fc3pxnWrap(l"+str(i+1)+"act_bin, l"+str(i+1)+"wght, l"+str(i+1)+"ind, F"+str(i+1)+"NPI, F"+str(i+1)+"O, l"+str(i+2)+"act_bin, bn"+str(i+1)+"thr, bn"+str(i+1)+"sign);\n\t\t")
@@ -1026,6 +1033,7 @@ class convert(object):
                   print("FcXnorWrap")
                   self.source.write("FcXnorWrap(l" + str(i + 1) + "act_bin, l" + str(i + 1) + "wght, F" + str(i + 1) + "I, F" + str(i + 1) + "O, l" + str(
                      i + 2) + "act_bin, bn" + str(i + 1) + "thr, bn" + str(i + 1) + "sign);\n\t\t")
+               batch_index+=1
             #normal layer without batchnorm
             elif i<len(total_ops)-1:
                if sparse:
@@ -1036,7 +1044,7 @@ class convert(object):
                   self.source.write("FcXnorWrap(l" + str(i + 1) + "act_bin, l" + str(i + 1) + "wght, F" + str(i + 1) + "I, F" + str(i + 1) + "O, l" + str(
                      i + 2) + "act_bin, NULL, NULL);\n\t\t")
             #last layer
-            elif i==len(total_ops)-1 and (total_ops[j] in self.batchn.keys() for j in range(total_ops[i],len(self.graph.operations))):
+            elif i==len(total_ops)-1 and have_batch:
                if sparse:
                   print("Fc3pxnNoBinWrap")
                   self.source.write("int res = Fc3pxnNoBinWrap(l"+str(i+1)+"act_bin, l"+str(i+1)+"wght, l"+str(i+1)+"ind, F"+str(i+1)+"NPI, F"+str(i+1)+"O, output, bn")
@@ -1050,15 +1058,16 @@ class convert(object):
          else:
             #first layer. should be BWN
             #with batchnorm
-            if i==0 and (total_ops[j] in self.batchn.keys() for j in range(total_ops[i],total_ops[i+1])):
+            if i==0 and have_batch:
                print("CnBnBwn")
                self.source.write("CnBnBwn(curr_im, l1wght, C1Z, C1XY, C1XY, C1Z, C1KXY, C1KXY, C1KZ, C1PD, C1PL, l2act_bin, bn1thr, bn1sign);\n\t\t")
+               batch_index+=1
             #without batch norm
             elif i==0:
                print("CnBnBwn")
                self.source.write("CnBnBwn(curr_im, l1wght, C1Z, C1XY, C1XY, C1Z, C1KXY, C1KXY, C1KZ, C1PD, C1PL, l2act_bin, NULL,NULL)\n\t\t")
             #normal layer
-            elif i<len(total_ops)-1 and (total_ops[j] in self.batchn.keys() for j in range(total_ops[i],total_ops[i+1])):
+            elif i<len(total_ops)-1 and have_batch:
                if sparse:
                   print("Cn3pxnWrap")
                   self.source.write("Cn3pxnWrap(l"+str(i+1)+"act_bin, l"+str(i+1)+"wght, l"+str(i+1)+"ind, C"+str(i+1)+"NPI, C"+str(i+1))
@@ -1072,6 +1081,7 @@ class convert(object):
                      i + 1) + "KXY, C" + str(i + 1) + "KXY, C" + str(i + 1) + "KZ, l" + str(i + 2) + "act_bin, C" + str(
                      i + 1))
                   self.source.write("PD, C" + str(i + 1) + "PL, bn" + str(i + 1) + "thr, bn" + str(i + 1) + "sign);\n\t\t")
+               batch_index+=1
             #last layer
             elif i == len(total_ops)-1:
                if sparse:
