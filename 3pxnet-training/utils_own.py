@@ -131,14 +131,14 @@ def load_dataset(dataset):
       classes = ('0', '1', '2', '3',
                  '4', '5', '6', '7', '8', '9')
    elif dataset == 'CIFAR10':
-      mean = [0.4914, 0.4822, 0.4465]
-      std = [0.2023, 0.1994, 0.2010]
+#       mean = [0.4914, 0.4822, 0.4465]
+#       std = [0.2023, 0.1994, 0.2010]
       transform = transforms.Compose([transforms.ToTensor()])
       trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                               download=True, transform=transforms.Compose([transforms.RandomCrop(32, 4),
                                                                                            transforms.RandomHorizontalFlip(),
-                                                                                           transforms.ToTensor(),
-                                                                                           transforms.Normalize(mean,std)]))
+                                                                                           transforms.ToTensor()]))
+#                                                                                            transforms.Normalize(mean,std)]))
       testset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                              download=True, transform=transform)
       classes = ('plane', 'car', 'bird', 'cat',
