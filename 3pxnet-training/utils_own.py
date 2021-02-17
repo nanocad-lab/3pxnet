@@ -117,14 +117,15 @@ def load_dataset(dataset):
       classes = ('0', '1', '2', '3',
                  '4', '5', '6', '7', '8', '9')
    elif dataset == 'SVHN':
-      mean = [0.4377, 0.4438, 0.4728]
-      std = [0.1201, 0.1231, 0.1052]
-      transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean, std)])
+#       mean = [0.4377, 0.4438, 0.4728]
+#       std = [0.1201, 0.1231, 0.1052]
+#       transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean,std)])
+      transform = transforms.Compose([transforms.ToTensor()])
       trainset = torchvision.datasets.SVHN(root='./data', split='train',
                                            download=True, transform=transforms.Compose([transforms.RandomCrop(32, 4),
                                                                                         transforms.RandomHorizontalFlip(),
-                                                                                        transforms.ToTensor(),
-                                                                                        transforms.Normalize(mean, std),]))
+                                                                                        transforms.ToTensor()]))
+#                                                                                         transforms.Normalize(mean,std)]))
       testset = torchvision.datasets.SVHN(root='./data', split='test',
                                           download=True, transform=transform)
       classes = ('0', '1', '2', '3',
@@ -132,12 +133,12 @@ def load_dataset(dataset):
    elif dataset == 'CIFAR10':
       mean = [0.4914, 0.4822, 0.4465]
       std = [0.2023, 0.1994, 0.2010]
-      transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean, std)])
+      transform = transforms.Compose([transforms.ToTensor()])
       trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                               download=True, transform=transforms.Compose([transforms.RandomCrop(32, 4),
                                                                                            transforms.RandomHorizontalFlip(),
                                                                                            transforms.ToTensor(),
-                                                                                           transforms.Normalize(mean, std),]))
+                                                                                           transforms.Normalize(mean,std)]))
       testset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                              download=True, transform=transform)
       classes = ('plane', 'car', 'bird', 'cat',

@@ -32,6 +32,7 @@ parser.add_argument('--seed', metavar='SEED', default=0, type=int, help='Seed to
 parser.add_argument('--cpu', dest='cpu', default=False, action='store_true', help='Train using cpu')
 parser.add_argument('--test_start_id',default=0,help='start index of testing dataset')
 parser.add_argument('--test_end_id',default=100,help='end index of testing dataset')
+parser.add_argument('--device',default=0,type=int,help='GPU to use')
 
 
 def main():
@@ -58,7 +59,7 @@ def main():
         binary=True
     else:
         binary=False
-    device = 0
+    device = args.device
 
     test_start_id = int(args.test_start_id)
     test_end_id = int(args.test_end_id)
@@ -242,13 +243,19 @@ def main():
             np.save(upload_dir+'bn1d_{0}_var'.format(bn1d_count), var)
 
     if args.size==1:
-        x=Variable(torch.randn(1,3,32,32,requires_grad=True,device='cuda'))
+        if args.cpu:
+            x=Variable(torch.randn(1,3,32,32,requires_grad=True))
+        else:
+            x=Variable(torch.randn(1,3,32,32,requires_grad=True).cuda(device))
         torch.onnx.export(net,x,"training_data/CNN_Large.onnx",verbose=True,opset_version=9,input_names = ['input'], output_names = ['output'])
         model=onnx.load("training_data/CNN_Large.onnx")
         # this can remove unecessary nodes
         ort_session = onnxruntime.InferenceSession("training_data/CNN_Large.onnx")
     elif args.size==0:
-        x=Variable(torch.randn(1,3,32,32,requires_grad=True,device='cuda'))
+        if args.cpu:
+            x=Variable(torch.randn(1,3,32,32,requires_grad=True))
+        else:
+            x=Variable(torch.randn(1,3,32,32,requires_grad=True).cuda(device))
         torch.onnx.export(net,x,"training_data/CNN_Medium.onnx",verbose=True,opset_version=9,input_names = ['input'], output_names = ['output'])
         model=onnx.load("training_data/CNN_Medium.onnx")
         # this can remove unecessary nodes
