@@ -21,4 +21,4 @@ else ifdef CIFAR
 	$(PYTHON_EXECUTABLE) ../3pxnet-compiler/compiler.py --input="../CNN_Large.nnef" --dataset=CIFAR10
 endif
 clean:
-rm -rf *.nnef *.onnx ../3pxnet-compiler/autogen/*
+	rm -rf *.nnef *.onnx ../3pxnet-compiler/autogen/*
