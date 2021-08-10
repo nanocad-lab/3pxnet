@@ -10,7 +10,7 @@ train:
 ifdef MNIST
 	$(PYTHON_EXECUTABLE) main_mnist.py --size 1 --permute 1
 else ifdef CIFAR
-	$(PYTHON_EXECUTABLE) main_conv.py --size 1 --permute 1
+	$(PYTHON_EXECUTABLE) main_conv.py --size 1 --dataset=CIFAR10 --permute 1
 endif
 convert:
 ifdef MNIST
