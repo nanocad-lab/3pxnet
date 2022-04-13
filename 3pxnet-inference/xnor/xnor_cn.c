@@ -2944,7 +2944,7 @@ void CnBnPdPlXnorNeonQ(pckDtype * __restrict pAct, pckDtype * __restrict pKrn, c
    uint8_t  xEnd, yEnd = 0;
    uint8_t  xxEnd, yyEnd = 0;
    // XY count for padding adjustment
-   uint8_t  gyCount = 0;
+   uint8_t  xyCount = 0;
    // For maxpooling
    int32_t  maxTemp = 0;
    pckDtype  *signs = sign;
