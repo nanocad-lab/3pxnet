@@ -2987,7 +2987,7 @@ void CnBnPdPlXnorNeonQ(pckDtype * __restrict pAct, pckDtype * __restrict pKrn, c
                         for (uint16_t kx = xxStart; kx < xxEnd; kx++) {
                               xyCount++;
                               // Z dim
-                              for (uint16_t z = 0; z < dpth/128; z++) {
+                              for (uint16_t z = 0; z < dpth/pckWdt/128; z++) {
                                  // Load values
                                  vecAct = vld1q_s32(pAct + (y*pool+yy+ky-pad)*yCoeff + (x*pool+xx+kx-pad)*xCoeff + z*128/pckWdt);
                                  vecWgt = vld1q_s32(pKrn + (k*pckWdt+ks)*kCoeff +  ky*kyCoeff + kx*kxCoeff+ z*128/pckWdt);
